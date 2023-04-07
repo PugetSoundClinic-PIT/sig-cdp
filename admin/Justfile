@@ -1,0 +1,10 @@
+set dotenv-load
+
+# list all available commands
+default:
+  just --list
+
+install:
+  pip install --upgrade --no-cache-dir pip setuptools wheel
+  pip install -r requirements.txt
+  pip install $PRODIGY_INSTALL_COMMAND
