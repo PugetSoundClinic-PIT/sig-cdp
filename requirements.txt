@@ -1,3 +1,2 @@
 jupyterlab
-cdp-backend~=3.2.11
 cdp-data[plot]~=0.0.9
