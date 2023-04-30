@@ -1,0 +1,36 @@
+# list all available commands
+default:
+  just --list
+
+# upload all datasets
+upload:
+    prodigy \
+        db-in \
+        model-annotations-seattle \
+        {{ justfile_directory() }}/annotations_seattle.jsonl
+    prodigy \
+        db-in \
+        model-annotations-louisville \
+        {{ justfile_directory() }}/annotations_louisville.jsonl
+
+# load checkpointed annotations for example
+load-checkpoint:
+    prodigy \
+        spans.manual \
+        model-annotations-seattle \
+        blank:en \
+        ../sp-week-5/seattle_dataset.jsonl \
+        --label PERSON,PERSON-AFFLIATED-WITH-ORG
+
+# train the model
+train:
+    prodigy \
+        train \
+        ./model \
+        --label-stats \
+        --verbose \
+        --spancat model-annotations-seattle,model-annotations-louisville
+
+# run an extra eval of the model on the original IRR data
+eval:
+    python irr-for-model-eval.py
