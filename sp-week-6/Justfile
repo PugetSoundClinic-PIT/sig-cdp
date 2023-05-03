@@ -4,14 +4,18 @@ default:
 
 # upload all datasets
 upload:
-    prodigy \
-        db-in \
-        model-annotations-seattle \
-        {{ justfile_directory() }}/annotations_seattle.jsonl
+    # prodigy \
+    #     db-in \
+    #     model-annotations-seattle \
+    #     {{ justfile_directory() }}/annotations_seattle.jsonl
     prodigy \
         db-in \
         model-annotations-louisville \
         {{ justfile_directory() }}/annotations_louisville.jsonl
+    prodigy \
+        db-in \
+        model-annotations-oakland \
+        {{ justfile_directory() }}/annotations_oakland.jsonl
 
 # load checkpointed annotations for example
 load-checkpoint:
@@ -29,7 +33,7 @@ train:
         ./model \
         --label-stats \
         --verbose \
-        --spancat model-annotations-seattle,model-annotations-louisville
+        --spancat model-annotations-seattle,model-annotations-louisville,model-annotations-oakland
 
 # run an extra eval of the model on the original IRR data
 eval:
