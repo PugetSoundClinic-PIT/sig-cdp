@@ -1,0 +1,5 @@
+statsmodels==0.13.5
+jupyterlab
+ipywidgets
+segeval==2.0.11
+pip install cupy-cuda11x
