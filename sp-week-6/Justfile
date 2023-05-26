@@ -2,26 +2,34 @@
 default:
   just --list
 
+# convert to ner
+convert-to-ner:
+    python convert-to-ner.py
+
 # upload all datasets
 upload:
-    # prodigy \
-    #     db-in \
-    #     model-annotations-seattle \
-    #     {{ justfile_directory() }}/annotations_seattle.jsonl
     prodigy \
         db-in \
-        model-annotations-louisville \
-        {{ justfile_directory() }}/annotations_louisville.jsonl
+        model-annotations-seattle-ner \
+        {{ justfile_directory() }}/annotations_seattle_ner.jsonl
     prodigy \
         db-in \
-        model-annotations-oakland \
-        {{ justfile_directory() }}/annotations_oakland.jsonl
+        model-annotations-louisville-ner \
+        {{ justfile_directory() }}/annotations_louisville_ner.jsonl
+    prodigy \
+        db-in \
+        model-annotations-oakland-ner \
+        {{ justfile_directory() }}/annotations_oakland_ner.jsonl
+    prodigy \
+        db-in \
+        model-annotations-alameda-ner \
+        {{ justfile_directory() }}/annotations_alameda_ner.jsonl
 
 # load checkpointed annotations for example
 load-checkpoint:
     prodigy \
-        spans.manual \
-        model-annotations-seattle \
+        ner.manual \
+        model-annotations-seattle-ner \
         blank:en \
         ../sp-week-5/seattle_dataset.jsonl \
         --label PERSON,PERSON-AFFLIATED-WITH-ORG
@@ -31,10 +39,27 @@ train:
     prodigy \
         train \
         ./model \
+        --gpu-id 0 \
         --label-stats \
         --verbose \
-        --spancat model-annotations-seattle,model-annotations-louisville,model-annotations-oakland
+        --ner model-annotations-seattle-ner,model-annotations-louisville-ner,model-annotations-oakland-ner,model-annotations-alameda-ner
 
 # run an extra eval of the model on the original IRR data
 eval:
     python irr-for-model-eval.py
+
+# Results
+# sm
+#                                 P       R       F
+# PERSON-AFFLIATED-WITH-ORG   13.33   12.50   12.90
+# PERSON                      37.50   21.43   27.27
+
+# lg
+#                                 P       R       F
+# PERSON-AFFLIATED-WITH-ORG    8.33    6.25    7.14
+# PERSON                      30.77   28.57   29.63
+
+# scratch
+#                                 P       R       F
+# PERSON-AFFLIATED-WITH-ORG   20.00   18.75   19.35
+# PERSON                      50.00   21.43   30.00
