@@ -3,3 +3,4 @@ cdp-datasets
 .env
 model/
 stored-classifier.pkl
+local-interest-groups-ner-model-v1/
