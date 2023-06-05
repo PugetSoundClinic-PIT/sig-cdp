@@ -2,3 +2,4 @@
 cdp-datasets
 .env
 model/
+stored-classifier.pkl
